@@ -37,7 +37,7 @@ namespace Austeroids.Entities
 
         public override Vector[] Draw(float curTime, out int length)
         {
-            Vector[] Points = Render.DrawPoly(Render.DrawCircle(this.Position, getRadius(), 4), 2);
+            Vector[] Points = Render.DrawPoly(Render.DrawCircle(this.Position, getRadius(), 5), 2);
             length = Points.Length;
             return Points;
         }

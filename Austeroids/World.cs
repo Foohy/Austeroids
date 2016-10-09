@@ -16,6 +16,7 @@ namespace Austeroids
         private int bufferLen = 3000;
         private float noiseAmount;
         private Vector noiseCenter = new Vector(0,0);
+        long tick = 0;
 
         public void StartGame()
         {
@@ -30,6 +31,8 @@ namespace Austeroids
             //SetNoise(CMath.SinBetween(CurrentTime(), 0, 100.0f));
             if (audio.NeedsMoreData())
             {
+                tick++;
+
                 int bufferLength = 0;
                 Array.Clear(sampleBuffer, 0, sampleBuffer.Length);
                 for (int i = 0; i < Entities.Count; i++)
@@ -54,8 +57,8 @@ namespace Austeroids
 
                 for (int i = 0; i < bufferLength; i++)
                 {
-                    float randAmt = Math.Max(0, 500 - (noiseCenter - sampleBuffer[i]).Length()) / 1500f;
-                    sampleBuffer[i] += Vector.RandomVector(noiseAmount * randAmt);
+                    //float randAmt = Math.Max(0, 500 - (noiseCenter - sampleBuffer[i]).Length()) / 1500f;
+                    //sampleBuffer[i] += Vector.RandomVector(noiseAmount * randAmt);
                 }
 
                 for (int i = bufferLength; i < bufferLen; i++)
@@ -64,6 +67,7 @@ namespace Austeroids
                     //Console.WriteLine("{0}, {1}", perc, bufferLength);
 
                     sampleBuffer[i] = new Vector((float)Math.Cos(perc), (float)Math.Sin(perc)) * 500;
+                    sampleBuffer[i] += Vector.RandomVector(noiseAmount );
                 }
 
 
@@ -74,6 +78,11 @@ namespace Austeroids
         public float CurrentTime()
         {
             return sw.ElapsedMilliseconds / 1000f;
+        }
+
+        public long CurrentTick()
+        {
+            return tick;
         }
 
         public void SetNoise(float amt)

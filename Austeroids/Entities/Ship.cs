@@ -16,6 +16,7 @@ namespace Austeroids.Entities
         Vector[] samplePointBuffer = new Vector[4096];
         Vector velocity = new Vector(0, 0);
         float rotationVelocity = 0;
+        long lastShoot = 0;
 
         bool wasPressed = false;
         public Ship()
@@ -26,6 +27,8 @@ namespace Austeroids.Entities
         private void OnShoot() {
             Vector bulletVel = new Vector(0, 1f).Rotate(rotation - (float)Math.PI / 2f) * 10f;
             this.OwningWorld.Create<Bullet>().SetupBullet(this.Position, bulletVel);
+
+            lastShoot = OwningWorld.CurrentTick();
         }
 
         public override void Think(float curTime)
@@ -57,7 +60,7 @@ namespace Austeroids.Entities
 
             rotationVelocity += spin;
 
-            rotation += rotationVelocity;
+            rotation = (rotation + rotationVelocity) % 360;
             velocity += new Vector(0, thrust).Rotate(rotation - (float)Math.PI / 2f);
 
             //Apply dampening
@@ -66,7 +69,13 @@ namespace Austeroids.Entities
             
             SetPosition(this.Position.X + velocity.X, this.Position.Y + velocity.Y);
 
-            OwningWorld.SetTone((int)(this.velocity.Length()*16 + 70));
+            long tickDiff = OwningWorld.CurrentTick() - lastShoot;
+            if (tickDiff > 100 || tickDiff % 16 == 0)
+            {
+                OwningWorld.SetTone((int)(this.velocity.Length()*16 + 90));
+               
+            }
+            else OwningWorld.SetTone(1000 - (int)tickDiff * 2);
         }
 
         public override Vector[] Draw(float curTime, out int length)
@@ -78,12 +87,20 @@ namespace Austeroids.Entities
 
             int Y = CMath.NearestOf((int)Interop.GetCursorPosition().Y / 8, 4);
 
-            Vector[] points = Render.DrawTri(front, backUp, backDown, 60); //60
-            Array.Copy(points, 0, samplePointBuffer, 0, points.Length);
-            length = points.Length;
+            length = 0;
 
-            Array.Copy(Render.DrawCircle(this.Position, 20, 20), 0, samplePointBuffer, length, 20);
-            length += 20;
+
+            if (OwningWorld.CurrentTick() % 2 == 0)
+            {
+                Array.Copy(Render.DrawCircle(this.Position, 20, 20), 0, samplePointBuffer, length, 20);
+                length += 20;
+            }
+            else
+            {
+                Vector[] points = Render.DrawTri(front, backUp, backDown, 60); //60
+                Array.Copy(points, 0, samplePointBuffer, 0, points.Length);
+                length = points.Length;
+            }
 
 
 

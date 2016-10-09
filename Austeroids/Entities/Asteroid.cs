@@ -10,6 +10,8 @@ namespace Austeroids.Entities
     {
         Vector[] samplePointBuffer = new Vector[4096];
         float radius = 50;
+        public bool Exploding { get { return explodeTime > 0; } }
+        float explodeTime = 0;
         public Asteroid()
         {
             this.SetPosition((float)CMath.Rand.NextDouble() * 650 - 650 / 2,
@@ -30,8 +32,9 @@ namespace Austeroids.Entities
 
             }
 
-            OwningWorld.Create<Noise>().SetupNoise(500, 1);
-            this.Destroy();
+            OwningWorld.Create<Noise>().SetupNoise(200, 0.2f);
+            explodeTime = OwningWorld.CurrentTime();
+            //this.Destroy();
         }
 
         public bool Within(Vector test)
@@ -41,14 +44,21 @@ namespace Austeroids.Entities
 
         public override void Think(float curTime)
         {
-
+            if (Exploding && curTime - explodeTime > 4f)
+            {
+                this.Destroy();
+            }
         }
 
         public override Vector[] Draw(float curTime, out int length)
         {
             length = 0;
             Vector[] Points = Render.DrawPoly(Render.DrawCircle(this.Position, radius, 6), 2);
-            length = Points.Length;
+            for (int i = 0; Exploding && i < Points.Length; i++)
+            {
+                Points[i] += Vector.RandomVector((curTime - explodeTime) * 200f + 50f);
+            }
+                length = Points.Length;
             samplePointBuffer = Points;
             /*
             for (int i = 0; i < 16; i++)

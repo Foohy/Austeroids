@@ -29,7 +29,7 @@ namespace Austeroids.Entities
             Asteroid[] asses = OwningWorld.GetByType<Asteroid>();
             foreach (Asteroid ass in asses)
             {
-                if (ass.Within(this.Position) && !ass.MarkedForDelete)
+                if (ass.Within(this.Position) && !ass.MarkedForDelete && !ass.Exploding)
                 {
                     ass.Explode();
                     this.Destroy();
