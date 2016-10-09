@@ -21,7 +21,7 @@ namespace Austeroids.Entities
             this.dieTime = OwningWorld.CurrentTime() + (float)CMath.Rand.NextDouble() * 5f + 2;
             this.startTime = OwningWorld.CurrentTime();
         }
-        public override void Think(float curTime)
+        public override void Think(float curTime, float deltaTime)
         {
             SetPosition(this.Position.X + velocity.X, this.Position.Y + velocity.Y);
 
@@ -37,7 +37,7 @@ namespace Austeroids.Entities
 
         public override Vector[] Draw(float curTime, out int length)
         {
-            Vector[] Points = Render.DrawPoly(Render.DrawCircle(this.Position, getRadius(), 5), 2);
+            Vector[] Points = Render.DrawPoly(Render.DrawCircle(this.Position, getRadius(), 4), 3);
             length = Points.Length;
             return Points;
         }

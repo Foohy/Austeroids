@@ -32,7 +32,7 @@ namespace Austeroids
             world.Create<Entities.Ship>();
             //world.Create<Entities.Ship>(new Vector(50, 50));
 
-            for (int i = 0; i < 3; i++)
+            for (int i = 0; i < 10; i++)
             {
                 world.Create<Entities.Asteroid>();
             }

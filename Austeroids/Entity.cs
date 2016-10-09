@@ -21,7 +21,7 @@ namespace Austeroids
             Position = new Vector(0, 0);
         }
 
-        public abstract void Think(float curTime);
+        public abstract void Think(float curTime, float deltaTime);
 
         /// <summary>
         /// Draw the entity 
@@ -35,12 +35,12 @@ namespace Austeroids
 
         public void SetPosition(Vector pos) 
         {
-            Position = pos;
+            Position = pos.Wrap(1000);
         }
 
         public void SetPosition(float x, float y)
         {
-            SetPosition(new Vector(x % 1000, y % 1000));
+            SetPosition(new Vector(x, y));
         }
 
         public void SetWorld(World world)

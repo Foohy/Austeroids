@@ -10,6 +10,8 @@ namespace Austeroids.Entities
     {
         Vector velocity;
         float length;
+        float spawnTime = 0;
+        float lifeTime = 0;
 
         public Bullet()
         {
@@ -20,11 +22,14 @@ namespace Austeroids.Entities
         {
             this.velocity = Velocity;
             this.SetPosition(Position);
+
+            this.spawnTime = OwningWorld.CurrentTime();
+            this.lifeTime = 5f;
         }
 
-        public override void Think(float curTime)
+        public override void Think(float curTime, float deltaTime)
         {
-            SetPosition(this.Position.X + velocity.X, this.Position.Y + velocity.Y);
+            SetPosition(this.Position + velocity * deltaTime);
 
             Asteroid[] asses = OwningWorld.GetByType<Asteroid>();
             foreach (Asteroid ass in asses)
@@ -36,12 +41,20 @@ namespace Austeroids.Entities
                     break;
                 }
             }
+
+            if (OwningWorld.CurrentTime() - spawnTime > lifeTime)
+            {
+                this.Destroy();
+            }
         }
 
 
         public override Vector[] Draw(float curTime, out int length)
         {
-            Vector[] p = Render.DrawLine(this.Position, this.Position - this.velocity * 10f, 5 );
+
+            int numPoints = (int)(15 * (1 - (OwningWorld.CurrentTime() - spawnTime) / lifeTime));
+            numPoints = Math.Max(numPoints, 0);
+            Vector[] p = Render.DrawLine(this.Position, this.Position - this.velocity * 0.05f, numPoints);
 
             length = p.Length;
             return p;

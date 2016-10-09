@@ -15,7 +15,8 @@ namespace Austeroids
         Stopwatch sw = Stopwatch.StartNew();
         private int bufferLen = 3000;
         private float noiseAmount;
-        private Vector noiseCenter = new Vector(0,0);
+        private float lastCurTime = 0;
+        //private Vector noiseCenter = new Vector(0,0);
         long tick = 0;
 
         public void StartGame()
@@ -27,8 +28,6 @@ namespace Austeroids
 
         public void Tick()
         {
-            //SetTone((int)CMath.SinBetween(sw.ElapsedMilliseconds / 1000f, 100, 440));
-            //SetNoise(CMath.SinBetween(CurrentTime(), 0, 100.0f));
             if (audio.NeedsMoreData())
             {
                 tick++;
@@ -37,29 +36,28 @@ namespace Austeroids
                 Array.Clear(sampleBuffer, 0, sampleBuffer.Length);
                 for (int i = 0; i < Entities.Count; i++)
                 {
-
                     Entity ent = Entities[i];
 
                     float curTime = CurrentTime();
-                    ent.Think(curTime);
+                    float dt = Math.Min(curTime - lastCurTime, 0.5f);
+                    ent.Think(curTime, dt);
 
                     int length;
                     Vector[] points = ent.Draw(curTime, out length);
                     Array.Copy(points, 0, sampleBuffer, bufferLength, length);
                     bufferLength += length;
-
-
-                    //SamplePoints.AddRange(points);
                 }
+                lastCurTime = CurrentTime();
 
                 //Remove deleted entities
                 Entities.RemoveAll(ent => ent.MarkedForDelete);
 
+                /*
                 for (int i = 0; i < bufferLength; i++)
                 {
                     //float randAmt = Math.Max(0, 500 - (noiseCenter - sampleBuffer[i]).Length()) / 1500f;
                     //sampleBuffer[i] += Vector.RandomVector(noiseAmount * randAmt);
-                }
+                }*/
 
                 for (int i = bufferLength; i < bufferLen; i++)
                 {

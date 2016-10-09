@@ -11,7 +11,7 @@ namespace Austeroids.Entities
         private float startTime;
         private float startNoise;
         private float falloff;
-        public override void Think(float curTime)
+        public override void Think(float curTime, float deltaTime)
         {
             float noiseLeft = CMath.Lerp(1 - (startTime + falloff - OwningWorld.CurrentTime()) / falloff, startNoise, 0);
             Console.WriteLine(noiseLeft);

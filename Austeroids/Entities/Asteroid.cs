@@ -17,7 +17,7 @@ namespace Austeroids.Entities
             this.SetPosition((float)CMath.Rand.NextDouble() * 650 - 650 / 2,
                 (float)CMath.Rand.NextDouble() * 650 - 650 / 2);
 
-            //radius = (float)CMath.Rand.NextDouble() * 50 + 40;
+            radius = (float)CMath.Rand.NextDouble() * 50 + 40;
         }
 
         public void Explode()
@@ -42,7 +42,7 @@ namespace Austeroids.Entities
             return (test - this.Position).LengthSquared() < radius * radius;
         }
 
-        public override void Think(float curTime)
+        public override void Think(float curTime, float deltaTime)
         {
             if (Exploding && curTime - explodeTime > 4f)
             {
@@ -53,7 +53,7 @@ namespace Austeroids.Entities
         public override Vector[] Draw(float curTime, out int length)
         {
             length = 0;
-            Vector[] Points = Render.DrawPoly(Render.DrawCircle(this.Position, radius, 6), 2);
+            Vector[] Points = Render.DrawPoly(Render.DrawCircle(this.Position, radius, 6), 3);
             for (int i = 0; Exploding && i < Points.Length; i++)
             {
                 Points[i] += Vector.RandomVector((curTime - explodeTime) * 200f + 50f);

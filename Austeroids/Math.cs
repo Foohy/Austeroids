@@ -78,6 +78,16 @@ namespace Austeroids
         {
             return ((int)Math.Round(num / (double)nearestMultiple, MidpointRounding.AwayFromZero)) * nearestMultiple;
         }
+
+        public static float Mod(float n, float mod)
+        {
+            return n - mod * (float)Math.Floor(n / mod);
+        }
+
+        public static float Clamp(float n, float low, float high)
+        {
+            return Math.Max(Math.Min(n, high), low);
+        }
     }
 
     struct Vector
@@ -109,6 +119,16 @@ namespace Austeroids
         public float LengthSquared()
         {
             return x * x + y * y;
+        }
+
+        public Vector Wrap(float mod)
+        {
+            return new Vector(CMath.Mod(this.X, mod), CMath.Mod(this.Y, mod));
+        }
+
+        public Vector Clamp(float min, float max)
+        {
+            return new Vector(CMath.Clamp(this.X, min, max), CMath.Clamp(this.Y, min, max));
         }
 
         public static Vector operator +(Vector A, Vector B)
