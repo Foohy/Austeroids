@@ -39,7 +39,7 @@ namespace Austeroids
 
             world.StartGame();
 
-            while (true)
+            while (IsLoaded)
             {
                 world.Tick();
 
