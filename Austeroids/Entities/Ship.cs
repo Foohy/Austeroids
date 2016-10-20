@@ -1,10 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Runtime.InteropServices;
-using System.Windows.Input;
+using System.Windows.Forms;
 
 namespace Austeroids.Entities
 {
@@ -31,12 +26,12 @@ namespace Austeroids.Entities
 
         private bool IsBoosting()
         {
-            return Keyboard.IsKeyDown(Key.F);
+            return Interop.IsKeyDown(Keys.F);
         }
 
         public override void Think(float curTime, float deltaTime)
         {
-            if (Keyboard.IsKeyDown(Key.Space) )
+            if (Interop.IsKeyDown(Keys.Space) )
             {
                 if (!wasPressed) {
                     OnShoot();
@@ -47,16 +42,16 @@ namespace Austeroids.Entities
             else { wasPressed = false; }
 
             float thrust = 0;
-            if (Keyboard.IsKeyDown(Key.Up) || Keyboard.IsKeyDown(Key.W)) { thrust += 1; }
-            if (Keyboard.IsKeyDown(Key.Down) || Keyboard.IsKeyDown(Key.S)) { thrust -= 1; }
+            if (Interop.IsKeyDown(Keys.Up) || Interop.IsKeyDown(Keys.W)) { thrust += 1; }
+            if (Interop.IsKeyDown(Keys.Down) || Interop.IsKeyDown(Keys.S)) { thrust -= 1; }
             thrust *= 7;
 
             if (IsBoosting()) thrust += 20;
             else if (velocity.Length() > 1500f) { thrust = 0f; }
 
             float spin = 0;
-            if (Keyboard.IsKeyDown(Key.Left) || Keyboard.IsKeyDown(Key.A)) { spin += 1; }
-            if (Keyboard.IsKeyDown(Key.Right) || Keyboard.IsKeyDown(Key.D)) { spin -= 1; }
+            if (Interop.IsKeyDown(Keys.Left) || Interop.IsKeyDown(Keys.A)) { spin += 1; }
+            if (Interop.IsKeyDown(Keys.Right) || Interop.IsKeyDown(Keys.D)) { spin -= 1; }
             spin *= 5;
 
             rotationVelocity += spin * deltaTime;
@@ -92,15 +87,11 @@ namespace Austeroids.Entities
 
         public override Vector[] Draw(float curTime, out int length)
         {
-
             Vector front, backUp, backDown;
             front = backUp = backDown = Vector.Zero;
             getRotatedPoints(out front, out backUp, out backDown);
 
-            int Y = CMath.NearestOf((int)Interop.GetCursorPosition().Y / 8, 4);
-
             length = 0;
-
 
             if (OwningWorld.CurrentTick() % 2 == 0)
             {

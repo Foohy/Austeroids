@@ -1,12 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Un4seen.Bass;
-using Un4seen.Bass.Misc;
-using System.Runtime.InteropServices;
-using System.Windows;
 
 namespace Austeroids
 {
@@ -55,7 +48,7 @@ namespace Austeroids
 
             Bass.BASS_StreamPutData(outputHandle, audioData, length);
         }
-
+        /*
         public void MakeSomeNoise()
         {
             int handle = Bass.BASS_StreamCreatePush(44100, 2, BASSFlag.BASS_DEFAULT, IntPtr.Zero); //BASS_SAMPLE_8BITS
@@ -99,7 +92,7 @@ namespace Austeroids
                     Bass.BASS_StreamPutData(handle, audioData, 2048);
                 }
             }
-        }
+        }*/
 
         private double Clamp(double n, double low, double high)
         {

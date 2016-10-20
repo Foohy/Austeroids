@@ -1,45 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Runtime.InteropServices;
-using System.Windows;
+using System.Windows.Forms;
 
 namespace Austeroids
 {
     class Interop
     {
-        /// <summary>
-        /// Struct representing a point.
-        /// </summary>
-        [StructLayout(LayoutKind.Sequential)]
-        public struct POINT
-        {
-            public int X;
-            public int Y;
-
-            public static implicit operator Point(POINT point)
-            {
-                return new Point(point.X, point.Y);
-            }
-        }
-
-        /// <summary>
-        /// Retrieves the cursor's position, in screen coordinates.
-        /// </summary>
-        /// <see>See MSDN documentation for further information.</see>
+        //Retrieve the current press-state of a specified key
         [DllImport("user32.dll")]
-        public static extern bool GetCursorPos(out POINT lpPoint);
+        static extern short GetAsyncKeyState(Keys vKey);
 
-        public static Point GetCursorPosition()
+        //Get if the selected key is pressed
+        public static bool IsKeyDown(Keys key)
         {
-            POINT lpPoint;
-            GetCursorPos(out lpPoint);
-            //bool success = User32.GetCursorPos(out lpPoint);
-            // if (!success)
-
-            return lpPoint;
+            return (GetAsyncKeyState(key) & 0x8000) != 0;
         }
     }
 }
