@@ -21,3 +21,8 @@ The game field is represented as simply a series of points, which are converted 
 * If you don't actually own an oscilloscope, I've made a program that uses your computer's audio output and plots it in realtime. Grab that here:
 https://github.com/Foohy/Oscillofun
 * It requires .Net 4.0 and a (relatively) quick CPU, in order to maintain the audio sample buffer.
+
+### Download
+The latest release information is posted over in the releases section of github          
+
+https://github.com/Foohy/Austeroids/releases/
